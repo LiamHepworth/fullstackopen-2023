@@ -1,33 +1,45 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const Button = ({handleClick, type}) => {
+  return ( 
+    <button onClick={() => handleClick(type)}>{type}</button>
+   );
+}
+
+const DisplayFeedback = ({type, value}) => {
+  return ( 
+    <span>{type} {value}</span>
+   );
+}
+
+const App = () => {
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  function handleButtonClick(type){
+    if(type === "good"){
+      setGood(good + 1)
+    } else if (type === "neutral"){
+      setNeutral(neutral + 1)
+    } else if (type === "bad"){
+      setBad(bad + 1)
+    }
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <h1>Give Feedback</h1>
+    <Button type={"good"} handleClick={handleButtonClick}></Button>
+    <Button type={"neutral"} handleClick={handleButtonClick}></Button>
+    <Button type={"bad"} handleClick={handleButtonClick}></Button>
+
+    <h1>statistics</h1>
+    <DisplayFeedback type={"good"} value={good}></DisplayFeedback>
+    <br />
+    <DisplayFeedback type={"neutral"} value={neutral}></DisplayFeedback>
+    <br />
+    <DisplayFeedback type={"bad"} value={bad}></DisplayFeedback>
     </>
   )
 }

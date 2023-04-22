@@ -6,25 +6,43 @@ const Button = ({handleClick, type}) => {
    );
 }
 
-const DisplayFeedback = ({type, value}) => {
-  return ( 
-    <span>{type} {value}</span>
-  );
-}
+// const DisplayFeedback = ({type, value}) => {
+//   return ( 
+//     <span>{type} {value}</span>
+//   );
+// }
 
-const DisplayStats = ({average, positive}) => {
-  if(average !== 0 || positive !== 0){
-      return (
-        <>
-          <span> average: {average} </span> 
-          <br />
-          <span>positive: {positive}%</span>
-        </>
-      ) 
-    } else {
-      return <span>No feedback given</span>
-    }
-  ;
+// const DisplayStats = ({average, positive}) => {
+//   if(average !== 0 || positive !== 0){
+//       return (
+//         <>
+//           <span> average: {average} </span> 
+//           <br />
+//           <span>positive: {positive}%</span>
+//         </>
+//       ) 
+//     } else {
+//       return <span>No feedback given</span>
+//     }
+//   ;
+// }
+
+const StatisticLine = ({statName, value}) => {
+  if(value !== 0){
+    return ( 
+      <>
+        <br />
+        <span><strong>{statName}</strong>: {value}</span>
+      </>
+    );
+  } else {
+    return (
+    <>
+      <br />
+      <span><strong>{statName}</strong>: No data</span>
+    </>
+    )
+  }
 }
 
 const App = () => {
@@ -70,14 +88,12 @@ const App = () => {
     <Button type={"bad"} handleClick={handleButtonClick}></Button>
 
     <br />
+    <StatisticLine statName={"good"} value={good}/>
+    <StatisticLine statName={"neutral"} value={neutral}/>
+    <StatisticLine statName={"bad"} value={bad}/>
     <br />
-    <DisplayFeedback type={"good"} value={good}></DisplayFeedback>
-    <br />
-    <DisplayFeedback type={"neutral"} value={neutral}></DisplayFeedback>
-    <br />
-    <DisplayFeedback type={"bad"} value={bad}></DisplayFeedback>
-    <h1>statistics</h1>
-    <DisplayStats average={average} positive={positive}></DisplayStats>
+    <StatisticLine statName={"average"} value={average}/>
+    <StatisticLine statName={"positive"} value={positive}/>
     </>
   )
 }

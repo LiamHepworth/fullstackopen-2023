@@ -13,13 +13,18 @@ const DisplayFeedback = ({type, value}) => {
 }
 
 const DisplayStats = ({average, positive}) => {
-  return ( 
-    <>
-      <span> average: {average} </span> 
-      <br />
-      <span>positive: {positive}%</span>
-    </>
-  );
+  if(average !== 0 || positive !== 0){
+      return (
+        <>
+          <span> average: {average} </span> 
+          <br />
+          <span>positive: {positive}%</span>
+        </>
+      ) 
+    } else {
+      return <span>No feedback given</span>
+    }
+  ;
 }
 
 const App = () => {
@@ -41,19 +46,19 @@ const App = () => {
 
   function handleButtonClick(type){
     if(type === "good"){
-      const updatedGood = good + 1  //ensures state is fully up to date
-      setGood(updatedGood)
-      getAverage(updatedGood, bad)
-      getPercentPositive(updatedGood, neutral, bad)
+      const updatedGood = good + 1;  //ensures state is fully up to date
+      setGood(updatedGood);
+      getAverage(updatedGood, bad);
+      getPercentPositive(updatedGood, neutral, bad);
     } else if (type === "neutral"){
-      const updatedNeutral = neutral + 1  //ensures state is fully up to date
-      setNeutral(updatedNeutral)
-      getPercentPositive(good, updatedNeutral, bad)
+      const updatedNeutral = neutral + 1;
+      setNeutral(updatedNeutral);
+      getPercentPositive(good, updatedNeutral, bad);
     } else if (type === "bad"){
-      const updatedBad = bad + 1  //ensures state is fully up to date
-      setBad(updatedBad)
-      getAverage(good, updatedBad)
-      getPercentPositive(good, neutral, updatedBad)
+      const updatedBad = bad + 1;  
+      setBad(updatedBad);
+      getAverage(good, updatedBad);
+      getPercentPositive(good, neutral, updatedBad);
     }
   }
 
@@ -64,13 +69,14 @@ const App = () => {
     <Button type={"neutral"} handleClick={handleButtonClick}></Button>
     <Button type={"bad"} handleClick={handleButtonClick}></Button>
 
-    <h1>statistics</h1>
+    <br />
+    <br />
     <DisplayFeedback type={"good"} value={good}></DisplayFeedback>
     <br />
     <DisplayFeedback type={"neutral"} value={neutral}></DisplayFeedback>
     <br />
     <DisplayFeedback type={"bad"} value={bad}></DisplayFeedback>
-    <br />
+    <h1>statistics</h1>
     <DisplayStats average={average} positive={positive}></DisplayStats>
     </>
   )

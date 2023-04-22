@@ -6,27 +6,6 @@ const Button = ({handleClick, type}) => {
    );
 }
 
-// const DisplayFeedback = ({type, value}) => {
-//   return ( 
-//     <span>{type} {value}</span>
-//   );
-// }
-
-// const DisplayStats = ({average, positive}) => {
-//   if(average !== 0 || positive !== 0){
-//       return (
-//         <>
-//           <span> average: {average} </span> 
-//           <br />
-//           <span>positive: {positive}%</span>
-//         </>
-//       ) 
-//     } else {
-//       return <span>No feedback given</span>
-//     }
-//   ;
-// }
-
 const StatisticLine = ({statName, value}) => {
   if(value !== 0){
     return ( 

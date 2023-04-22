@@ -9,7 +9,17 @@ const Button = ({handleClick, type}) => {
 const DisplayFeedback = ({type, value}) => {
   return ( 
     <span>{type} {value}</span>
-   );
+  );
+}
+
+const DisplayStats = ({average, positive}) => {
+  return ( 
+    <>
+      <span> average: {average} </span> 
+      {/* <br />
+      <span>positive: {positive} </span> */}
+    </>
+  );
 }
 
 const App = () => {
@@ -17,14 +27,32 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const [average, setAverage] = useState(0);
+  const [positive, setPositive] = useState(0);
+
+  function getAverage(good, bad){
+    console.log(good, bad)
+    setAverage(good + -bad / 2)
+  }
+
+  function getPercentPositive(){
+    let totalValue = good + neutral + bad;
+    setPositive((100 * good) / totalValue);
+  }
+
   function handleButtonClick(type){
     if(type === "good"){
-      setGood(good + 1)
+      const updatedGood = good + 1  //ensures state is fully up to date
+      setGood(updatedGood)
+      getAverage(updatedGood, bad)
     } else if (type === "neutral"){
       setNeutral(neutral + 1)
     } else if (type === "bad"){
-      setBad(bad + 1)
+      const updatedBad = bad + 1  //ensures state is fully up to date
+      setBad(updatedBad)
+      getAverage(good, updatedBad)
     }
+    getPercentPositive();
   }
 
   return (
@@ -40,6 +68,8 @@ const App = () => {
     <DisplayFeedback type={"neutral"} value={neutral}></DisplayFeedback>
     <br />
     <DisplayFeedback type={"bad"} value={bad}></DisplayFeedback>
+    <br />
+    <DisplayStats average={average} positive={positive}></DisplayStats>
     </>
   )
 }

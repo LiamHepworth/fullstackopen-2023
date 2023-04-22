@@ -16,8 +16,8 @@ const DisplayStats = ({average, positive}) => {
   return ( 
     <>
       <span> average: {average} </span> 
-      {/* <br />
-      <span>positive: {positive} </span> */}
+      <br />
+      <span>positive: {positive}%</span>
     </>
   );
 }
@@ -31,13 +31,12 @@ const App = () => {
   const [positive, setPositive] = useState(0);
 
   function getAverage(good, bad){
-    console.log(good, bad)
     setAverage(good + -bad / 2)
   }
 
-  function getPercentPositive(){
-    let totalValue = good + neutral + bad;
-    setPositive((100 * good) / totalValue);
+  function getPercentPositive(good, neutral, bad){
+    const totalValue = good + neutral + bad;
+    setPositive(parseInt((100 * good) / totalValue));
   }
 
   function handleButtonClick(type){
@@ -45,14 +44,17 @@ const App = () => {
       const updatedGood = good + 1  //ensures state is fully up to date
       setGood(updatedGood)
       getAverage(updatedGood, bad)
+      getPercentPositive(updatedGood, neutral, bad)
     } else if (type === "neutral"){
-      setNeutral(neutral + 1)
+      const updatedNeutral = neutral + 1  //ensures state is fully up to date
+      setNeutral(updatedNeutral)
+      getPercentPositive(good, updatedNeutral, bad)
     } else if (type === "bad"){
       const updatedBad = bad + 1  //ensures state is fully up to date
       setBad(updatedBad)
       getAverage(good, updatedBad)
+      getPercentPositive(good, neutral, updatedBad)
     }
-    getPercentPositive();
   }
 
   return (

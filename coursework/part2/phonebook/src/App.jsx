@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import People from './components/People'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -15,14 +18,14 @@ const App = () => {
   const [visiblePeople, setVisiblePeople] = useState(persons)
 
   const isExistingContact = (contact) => {
-    return persons.map((person) => person.name).includes(contact);
+    return persons.map((person) => person.name.toUpperCase()).includes(contact.toUpperCase());
   }
 
   const displayContacts = (e) => {
     e.preventDefault();
 
     if(isExistingContact(search)){
-      setVisiblePeople(persons.filter(person => person.name === search))
+      setVisiblePeople(persons.filter(person => person.name.toUpperCase() === search.toUpperCase()))
     } else {
       setVisiblePeople(persons)
       if(search !== ""){
@@ -51,25 +54,24 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={displayContacts}>
-        <div>Search: <input value={search} onChange={e => setSearch(e.target.value)}/> </div>
-        <div><button type="submit">lookup</button></div>      
-      </form>
-
+      <Filter 
+        displayContacts={displayContacts} 
+        search={search} 
+        setSearch={setSearch}>
+      </Filter>
 
       <h2>Add A Contact</h2>
-      <form onSubmit={addNewContact}>
-        <div>name: <input value={newName} onChange={e => setNewName(e.target.value)}/> </div>
-        <div>number: <input value={newNumber} onChange={e => setNewNumber(e.target.value)}/></div>  
-        <div><button type="submit">add</button></div>
-      </form>
+      <PersonForm
+        addNewContact={addNewContact}
+        newName={newName}
+        setNewName={setNewName}
+        newNumber={newNumber}
+        setNewNumber={setNewNumber}
+      ></PersonForm>
 
       <h2>Contacts</h2>
-      <ul>
-        {visiblePeople.map((person) => (
-          <li key={person.id}>{person.name}: {person.number}</li>
-        ))}
-      </ul>
+      <People visiblePeople={visiblePeople}></People>
+
     </div>
   )
 }

@@ -21,7 +21,7 @@ const Course = ( {courses} ) => {
                 <ul>
                 {course.parts.map((c) =>
                     <li key={c.id}>
-                    <Part part={c.name} exercise={c.exercises}></Part>
+                        <Part part={c.name} exercise={c.exercises}></Part>
                     </li>
                 )}
                 </ul>

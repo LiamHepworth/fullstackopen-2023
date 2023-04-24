@@ -2,7 +2,8 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas' },
+    { name: 'Liam Moses' },
   ]) 
   const [newName, setNewName] = useState('')
 
@@ -13,7 +14,11 @@ const App = () => {
       name: newName,
     }
 
-    setPersons(persons.concat(newContact))
+    if(persons.map((person) => person.name).includes(newName)){
+      alert(`${newName} already exists within contact list`)
+    } else {
+      setPersons(persons.concat(newContact))      
+    }
   };
 
   return (

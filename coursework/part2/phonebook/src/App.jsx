@@ -46,14 +46,17 @@ const App = () => {
     const newContact = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
     }
 
     if(isExistingContact(newName)){
       alert(`${newName} already exists within contact list`)
     } else {
-      setPersons(persons.concat(newContact));
-      setVisiblePeople(persons.concat(newContact));
+
+      axios.post("http://localhost:3001/persons", newContact)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setVisiblePeople(persons.concat(response.data))
+        })
     }
   };
 

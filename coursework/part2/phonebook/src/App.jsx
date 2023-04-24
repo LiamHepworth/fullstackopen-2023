@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import People from './components/People'
 import axios from 'axios'
+import contactService from './services/contactService'
 
 
 const App = () => {
@@ -16,11 +17,11 @@ const App = () => {
   const [visiblePeople, setVisiblePeople] = useState([])
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons")
-    .then((response) => {
-        setPersons(response.data)
-        setVisiblePeople(response.data)
-    })
+    contactService.getAll()
+      .then(response => {
+        setPersons(response)
+        setVisiblePeople(response)
+      })
   }, [])
 
   const isExistingContact = (contact) => {
@@ -51,11 +52,11 @@ const App = () => {
     if(isExistingContact(newName)){
       alert(`${newName} already exists within contact list`)
     } else {
-
-      axios.post("http://localhost:3001/persons", newContact)
+      contactService.create(newContact)
         .then(response => {
-          setPersons(persons.concat(response.data))
-          setVisiblePeople(persons.concat(response.data))
+          console.log(response)
+          setPersons(persons.concat(response))
+          setVisiblePeople(persons.concat(response))
         })
     }
   };

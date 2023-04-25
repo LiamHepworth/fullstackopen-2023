@@ -54,12 +54,20 @@ const App = () => {
     } else {
       contactService.create(newContact)
         .then(response => {
-          console.log(response)
           setPersons(persons.concat(response))
           setVisiblePeople(persons.concat(response))
         })
     }
   };
+
+  const deleteContact = (deletionId) => {
+    contactService.deleteEntry(deletionId)
+    .then(() => {
+      const filteredArr = persons.filter(person => person.id !== deletionId)
+      setPersons(filteredArr)
+      setVisiblePeople(filteredArr)
+  })
+  }
 
   return (
     <div>
@@ -80,7 +88,7 @@ const App = () => {
       ></PersonForm>
 
       <h2>Contacts</h2>
-      <People visiblePeople={visiblePeople}></People>
+      <People visiblePeople={visiblePeople} deleteContact={deleteContact}></People>
 
     </div>
   )

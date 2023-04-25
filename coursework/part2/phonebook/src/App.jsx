@@ -61,9 +61,11 @@ const App = () => {
     }
 
     if(isExistingContact(newName).isMatch){
-      // alert(`${newName} already exists within contact list`)
-      editContact(isExistingContact(newName).matchId, newContact)
-
+      if(confirm(`${newName} already exists within contact list, update number?`)){
+        editContact(isExistingContact(newName).matchId, newContact)
+      } else {
+        return
+      }
     } else {
       contactService.create(newContact)
         .then(response => {

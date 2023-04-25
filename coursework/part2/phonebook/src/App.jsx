@@ -25,10 +25,21 @@ const App = () => {
   }, [])
 
   const isExistingContact = (contact) => {
-    return persons.map((person) => person.name.toUpperCase()).includes(contact.toUpperCase());
+
+    const isMatch = persons.map((person) => person.name.toUpperCase()).includes(contact.toUpperCase());
+
+    if(isMatch === true){
+      const matchingContact = persons.filter((person) => contact.toUpperCase() === person.name.toUpperCase());
+      return {
+        isMatch: isMatch,
+        matchId: matchingContact[0].id,
+      }    
+    } else {
+      return false;
+    }
   }
 
-  const displayContacts = (e) => {
+  const filterContacts = (e) => {
     e.preventDefault();
 
     if(isExistingContact(search)){
@@ -49,8 +60,9 @@ const App = () => {
       number: newNumber,
     }
 
-    if(isExistingContact(newName)){
+    if(isExistingContact(newName).isMatch){
       alert(`${newName} already exists within contact list`)
+      console.log(isExistingContact(newName).matchId)
     } else {
       contactService.create(newContact)
         .then(response => {
@@ -62,18 +74,28 @@ const App = () => {
 
   const deleteContact = (deletionId) => {
     contactService.deleteEntry(deletionId)
-    .then(() => {
-      const filteredArr = persons.filter(person => person.id !== deletionId)
-      setPersons(filteredArr)
-      setVisiblePeople(filteredArr)
+      .then(() => {
+        const filteredArr = persons.filter(person => person.id !== deletionId)
+        setPersons(filteredArr)
+        setVisiblePeople(filteredArr)
   })
   }
+
+  // const editContact = (id, update) => {
+  //   contactService.update(id, update)
+  //     .then(request => {
+        
+  //     })
+  // }
+
+  //if "newName" is found in persons, get the ID of the match from persons
+  //pass id to edit contact, and pass updated entry
 
   return (
     <div>
       <h2>Phonebook</h2>
       <Filter 
-        displayContacts={displayContacts} 
+        filterContacts={filterContacts} 
         search={search} 
         setSearch={setSearch}>
       </Filter>

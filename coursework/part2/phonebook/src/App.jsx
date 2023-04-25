@@ -20,7 +20,7 @@ const App = () => {
   const [showMsg, setShowMsg] = useState(false)
   const handleMessage = (msg) => {
     setShowMsg(true)
-    setSuccessMsg(msg);
+    setSuccessMsg(msg)
     setTimeout(() => {
       setShowMsg(false)
       setSuccessMsg(null)
@@ -111,6 +111,8 @@ const App = () => {
 
   return (
     <div>
+      {showMsg ? <Notification message={successMsg}></Notification> : <span/>}
+
       <h2>Phonebook</h2>
       <Filter 
         filterContacts={filterContacts} 
@@ -119,10 +121,7 @@ const App = () => {
       </Filter>
 
       <h2>Add A Contact</h2>
-      
-      {showMsg ? <Notification message={successMsg}></Notification> : <span/>}
-
-      <PersonForm
+        <PersonForm
         addNewContact={addNewContact}
         newName={newName}
         setNewName={setNewName}

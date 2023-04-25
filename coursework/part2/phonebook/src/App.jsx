@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import People from './components/People'
-import axios from 'axios'
 import contactService from './services/contactService'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -15,6 +15,17 @@ const App = () => {
 
   const [search, setSearch] = useState('');
   const [visiblePeople, setVisiblePeople] = useState([])
+
+  const [successMsg, setSuccessMsg] = useState('Help')
+  const [showMsg, setShowMsg] = useState(false)
+  const handleMessage = (msg) => {
+    setShowMsg(true)
+    setSuccessMsg(msg);
+    setTimeout(() => {
+      setShowMsg(false)
+      setSuccessMsg(null)
+    }, 5000)
+  }
 
   useEffect(() => {
     contactService.getAll()
@@ -63,15 +74,18 @@ const App = () => {
     if(isExistingContact(newName).isMatch){
       if(confirm(`${newName} already exists within contact list, update number?`)){
         editContact(isExistingContact(newName).matchId, newContact)
+        handleMessage(`${newName} has been updated.`)
       } else {
+        handleMessage(`Operation cancelled`)
         return
       }
     } else {
       contactService.create(newContact)
-        .then(response => {
-          setPersons(persons.concat(response))
-          setVisiblePeople(persons.concat(response))
-        })
+      .then(response => {
+        setPersons(persons.concat(response))
+        setVisiblePeople(persons.concat(response))
+      })
+      handleMessage(`${newName} has been added to your contact list`)
     }
   };
 
@@ -91,10 +105,9 @@ const App = () => {
         setPersons(filteredArr)
         setVisiblePeople(filteredArr)
   })
+    const deletedContact = persons.find(person => person.id === deletionId)
+    handleMessage(`${deletedContact.name} has been removed from your contact list`)
   };
-
-  //if "newName" is found in persons, get the ID of the match from persons
-  //pass id to edit contact, and pass updated entry
 
   return (
     <div>
@@ -106,6 +119,9 @@ const App = () => {
       </Filter>
 
       <h2>Add A Contact</h2>
+      
+      {showMsg ? <Notification message={successMsg}></Notification> : <span/>}
+
       <PersonForm
         addNewContact={addNewContact}
         newName={newName}

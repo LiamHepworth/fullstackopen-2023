@@ -22,7 +22,7 @@ const App = () => {
         setPersons(response)
         setVisiblePeople(response)
       })
-  }, [])
+  }, []);
 
   const isExistingContact = (contact) => {
 
@@ -37,7 +37,7 @@ const App = () => {
     } else {
       return false;
     }
-  }
+  };
 
   const filterContacts = (e) => {
     e.preventDefault();
@@ -50,7 +50,7 @@ const App = () => {
         alert("contact not found")
       }
     }
-  }
+  };
 
   const addNewContact = (event) => {
     event.preventDefault()
@@ -61,8 +61,9 @@ const App = () => {
     }
 
     if(isExistingContact(newName).isMatch){
-      alert(`${newName} already exists within contact list`)
-      console.log(isExistingContact(newName).matchId)
+      // alert(`${newName} already exists within contact list`)
+      editContact(isExistingContact(newName).matchId, newContact)
+
     } else {
       contactService.create(newContact)
         .then(response => {
@@ -72,6 +73,15 @@ const App = () => {
     }
   };
 
+  const editContact = (id, update) => {
+    contactService.update(id, update)
+      .then(function (response) {
+        const updatedArr = persons.map(person => person.id === id ? response : person)
+        setPersons(updatedArr)
+        setVisiblePeople(updatedArr)
+      })
+  };
+
   const deleteContact = (deletionId) => {
     contactService.deleteEntry(deletionId)
       .then(() => {
@@ -79,14 +89,7 @@ const App = () => {
         setPersons(filteredArr)
         setVisiblePeople(filteredArr)
   })
-  }
-
-  // const editContact = (id, update) => {
-  //   contactService.update(id, update)
-  //     .then(request => {
-        
-  //     })
-  // }
+  };
 
   //if "newName" is found in persons, get the ID of the match from persons
   //pass id to edit contact, and pass updated entry

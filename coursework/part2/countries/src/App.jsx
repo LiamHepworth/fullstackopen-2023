@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import DisplayCountries from './components/DisplayCountries';
 
 function App() {
 
@@ -30,17 +31,13 @@ function App() {
           }/>
       </form>
 
-        <div>
-        {countries.length < 10 ? 
-          <ul>
-            {countries.map((country) => (
-              <li key={countries.indexOf(country)}>{country.name.common}</li>
-            ))}
-          </ul>
-          :
+      <div>
+        {countries.length < 10 ?
+          <DisplayCountries countries={countries} />
+        : 
           <span>Too many countries, refine search</span>
         }
-        </div>
+      </div>
 
     </div>
   )

@@ -28,6 +28,22 @@ app.get("/api/persons", (request, response) => {
   response.send(contacts)
 })
 
+//http://expressjs.com/en/guide/routing.html - see the route paramters section to see how we capture the id value.
+app.get("/api/persons/:id", (request, response) => {
+  const id = request.params.id
+  const contact = contacts.find((cont) => cont.id == id)
+
+  if (contact) {
+    response.send(contact)
+  } else {
+    response.status(404).end()
+  }
+})
+
+app.get("/info", (request, response) => {
+  response.send(`<p>Phonebook has info for ${contacts.length} people</p>`)
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)

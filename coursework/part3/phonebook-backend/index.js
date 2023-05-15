@@ -1,6 +1,12 @@
 const express = require("express")
 const app = express()
 
+app.use(express.json())
+
+const generateId = () => {
+  return Math.floor(Math.random() * (1000 - 0) + 0)
+}
+
 let contacts = [
   {
     id: 1,
@@ -45,6 +51,28 @@ app.delete("/api/persons/:id", (request, response) => {
   contacts = contacts.filter((cont) => cont.id !== id)
 
   response.status(204).end()
+})
+
+app.post("/api/persons", (request, response) => {
+  console.log(request.body.name)
+
+  if (!request.body.name) {
+    return response.status(400).json({
+      error: "no content",
+    })
+  } else if (contacts.find((el) => el.name == request.body.name)) {
+    return response.status(404).json({
+      error: "contact already exisits within phonebook",
+    })
+  }
+  const newContact = {
+    id: generateId(),
+    name: request.body.name,
+    number: request.body.number,
+  }
+
+  contacts = contacts.concat(newContact)
+  response.json(newContact)
 })
 
 app.get("/info", (request, response) => {

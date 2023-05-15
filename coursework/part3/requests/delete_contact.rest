@@ -1,5 +1,15 @@
-DELETE  http://localhost:3001/api/persons/2
+DELETE  http://localhost:3001/api/persons/1
 
 ###
 
 GET http://localhost:3001/api/persons
+
+###
+
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "Liam Moses",
+    "number": "000-000-001"
+}

@@ -1,7 +1,30 @@
 const express = require("express")
+const morgan = require("morgan")
 const app = express()
 
 app.use(express.json())
+
+morgan.token("type", function (req, res) {
+  return JSON.stringify(req.body)
+})
+
+//https://github.com/expressjs/morgan - Morgan middleware, to log HTTP requests
+app.use(
+  morgan(function (tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      "~content-length:",
+      tokens.res(req, res, "content-length"),
+      "~response-time:",
+      tokens["response-time"](req, res),
+      "ms",
+      "~data:",
+      tokens.type(req, res),
+    ].join(" ")
+  })
+)
 
 const generateId = () => {
   return Math.floor(Math.random() * (1000 - 0) + 0)

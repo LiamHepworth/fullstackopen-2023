@@ -1,0 +1,17 @@
+*{
+    font-family: sans-serif;
+}
+
+.notification-container{
+    background-color: rgb(166, 195, 196);
+    border-radius: 10px;
+    border: 3px solid cadetblue;
+    width: auto;
+    padding: 1em;
+    margin: 1em 0;
+}
+
+.notification-text{
+    font-size: 1.3rem;
+    color: rgb(30, 112, 115);
+}

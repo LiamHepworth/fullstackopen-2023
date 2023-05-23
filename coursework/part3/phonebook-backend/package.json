@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "c:/Users/liamm/.fly/bin/flyctl.exe deploy",
+    "logs:prod": "c:/Users/liamm/.fly/bin/flyctl.exe logs"
   },
   "author": "",
   "license": "ISC",

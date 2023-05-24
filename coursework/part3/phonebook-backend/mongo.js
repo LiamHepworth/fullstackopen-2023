@@ -16,3 +16,25 @@ const contactSchema = new mongoose.Schema({
 })
 
 const Contact = mongoose.model("Contact", contactSchema)
+
+if (process.argv.length < 4) {
+  Contact.find({}).then((result) => {
+    console.log("phonebook:")
+    result.forEach((cont) => {
+      console.log(cont.name, " ", cont.number)
+    })
+    mongoose.connection.close()
+  })
+} else {
+  const newContact = new Contact({
+    name: process.argv[3],
+    number: process.argv[4],
+  })
+
+  newContact.save().then((result) => {
+    console.log(
+      `added ${newContact.name} to your phonebook, with the number ${newContact.number}`
+    )
+    mongoose.connection.close()
+  })
+}

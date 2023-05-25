@@ -17,3 +17,13 @@ content-type: application/json
     "name": "Liam Moses",
     "number": "000-000-001"
 }
+
+###
+
+PUT http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "Liam Moses",
+    "number": "000-000-001"
+}

@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "c:/Users/liamm/.fly/bin/flyctl.exe deploy",
-    "logs:prod": "c:/Users/liamm/.fly/bin/flyctl.exe logs"
+    "logs:prod": "c:/Users/liamm/.fly/bin/flyctl.exe logs",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.2.7",
+    "eslint": "^8.41.0",
     "nodemon": "^2.0.22"
   }
 }

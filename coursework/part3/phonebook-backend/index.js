@@ -1,3 +1,5 @@
+// require("dotenv").config()
+const Contact = require("./models/contact")
 const express = require("express")
 const morgan = require("morgan")
 const cors = require("cors")
@@ -29,54 +31,10 @@ app.use(
   })
 )
 
-const generateId = () => {
-  return Math.floor(Math.random() * (1000 - 0) + 0)
-}
-
-let contacts = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-]
-
 app.get("/api/persons", (request, response) => {
-  response.send(contacts)
-})
-
-//http://expressjs.com/en/guide/routing.html - see the route paramters section to see how we capture the id value.
-app.get("/api/persons/:id", (request, response) => {
-  const id = request.params.id
-  const contact = contacts.find((cont) => cont.id == id)
-
-  if (contact) {
-    response.send(contact)
-  } else {
-    response.status(404).end()
-  }
-})
-
-app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id)
-  contacts = contacts.filter((cont) => cont.id !== id)
-
-  response.status(204).end()
+  Contact.find({}).then((cont) => {
+    response.json(cont)
+  })
 })
 
 app.post("/api/persons", (request, response) => {
@@ -86,24 +44,48 @@ app.post("/api/persons", (request, response) => {
     return response.status(400).json({
       error: "no content",
     })
-  } else if (contacts.find((el) => el.name == request.body.name)) {
-    return response.status(404).json({
-      error: "contact already exisits within phonebook",
-    })
   }
-  const newContact = {
-    id: generateId(),
+  // else if (contacts.find((el) => el.name == request.body.name)) {
+  //   return response.status(404).json({
+  //     error: "contact already exisits within phonebook",
+  //   })
+  // }
+
+  const newContact = new Contact({
     name: request.body.name,
     number: request.body.number,
-  }
+  })
 
-  contacts = contacts.concat(newContact)
-  response.json(newContact)
+  newContact.save().then((savedContact) => {
+    response.json(savedContact)
+  })
 })
 
-app.get("/info", (request, response) => {
-  response.send(`<p>Phonebook has info for ${contacts.length} people</p>`)
-})
+//http://expressjs.com/en/guide/routing.html - see the route paramters section to see how we capture the id value.
+//needs updating to draw from database now
+// app.get("/api/persons/:id", (request, response) => {
+//   const id = request.params.id
+//   const contact = contacts.find((cont) => cont.id == id)
+
+//   if (contact) {
+//     response.send(contact)
+//   } else {
+//     response.status(404).end()
+//   }
+// })
+
+//needs updating to draw from database now
+// app.delete("/api/persons/:id", (request, response) => {
+//   const id = Number(request.params.id)
+//   contacts = contacts.filter((cont) => cont.id !== id)
+
+//   response.status(204).end()
+// })
+
+//needs updating to work with DB
+// app.get("/info", (request, response) => {
+//   response.send(`<p>Phonebook has info for ${contacts.length} people</p>`)
+// })
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {

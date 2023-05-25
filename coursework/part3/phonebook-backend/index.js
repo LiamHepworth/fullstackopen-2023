@@ -31,6 +31,16 @@ app.use(
   })
 )
 
+const errorHandler = (error, request, response, next) => {
+  // console.log(error.message)
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" })
+  }
+
+  next(error)
+}
+
 app.get("/api/persons", (request, response) => {
   Contact.find({}).then((cont) => {
     response.json(cont)
@@ -63,29 +73,36 @@ app.post("/api/persons", (request, response) => {
 
 //http://expressjs.com/en/guide/routing.html - see the route paramters section to see how we capture the id value.
 //needs updating to draw from database now
-// app.get("/api/persons/:id", (request, response) => {
-//   const id = request.params.id
-//   const contact = contacts.find((cont) => cont.id == id)
-
-//   if (contact) {
-//     response.send(contact)
-//   } else {
-//     response.status(404).end()
-//   }
-// })
+app.get("/api/persons/:id", (request, response) => {
+  Contact.findById(request.params.id)
+    .then((cont) => {
+      if (cont) {
+        response.json(cont)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+      response.status(400).send({ error: "malformatted id" })
+    })
+})
 
 //needs updating to draw from database now
-// app.delete("/api/persons/:id", (request, response) => {
-//   const id = Number(request.params.id)
-//   contacts = contacts.filter((cont) => cont.id !== id)
-
-//   response.status(204).end()
-// })
+app.delete("/api/persons/:id", (request, response, next) => {
+  Contact.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end()
+    })
+    .catch((error) => next(error))
+})
 
 //needs updating to work with DB
 // app.get("/info", (request, response) => {
 //   response.send(`<p>Phonebook has info for ${contacts.length} people</p>`)
 // })
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
